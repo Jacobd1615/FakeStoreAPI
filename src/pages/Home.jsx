@@ -3,75 +3,110 @@ import { Button, Container, Carousel, Row, Col, Card, Badge } from 'react-bootst
 import { useState, useEffect } from 'react';
 
 // --- Home Component --- //
-// Professional landing page for the FakeStore application with enhanced features
+// Ultra-professional landing page with stunning features and animations
 function Home() {
   const [stats, setStats] = useState({ totalProducts: 0, categories: 0, happyCustomers: 1250 });
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [scrollY, setScrollY] = useState(0);
 
   // --- Data Fetching --- //
   useEffect(() => {
-    // Fetch some featured products for the carousel
-    fetch('https://fakestoreapi.com/products?limit=3')
+    // Fetch featured products
+    fetch('https://fakestoreapi.com/products?limit=4')
       .then(res => res.json())
       .then(data => setFeaturedProducts(data))
       .catch(err => console.error('Error fetching featured products:', err));
 
-    // Simulate fetching stats
-    setStats({ totalProducts: 120, categories: 4, happyCustomers: 1250 });
+    // Fetch real stats
+    Promise.all([
+      fetch('https://fakestoreapi.com/products').then(r => r.json()),
+      fetch('https://fakestoreapi.com/products/categories').then(r => r.json())
+    ])
+      .then(([products, categories]) => {
+        setStats({
+          totalProducts: products.length,
+          categories: categories.length,
+          happyCustomers: 5432
+        });
+      })
+      .catch(err => console.error('Error fetching stats:', err));
+
+    // Scroll effect
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // --- Static Data --- //
+  // --- Premium Features --- //
   const features = [
     {
       icon: '🛡️',
-      title: 'Secure Shopping',
-      description: 'Your transactions are protected with bank-level security'
+      title: 'Secure Transactions',
+      description: 'Military-grade encryption protects your data and payments'
     },
     {
-      icon: '🚚',
-      title: 'Fast Delivery',
-      description: 'Free shipping on orders over $50 with 2-day delivery'
+      icon: '⚡',
+      title: 'Lightning Fast',
+      description: 'Optimized for speed with instant checkout and delivery tracking'
     },
     {
-      icon: '↩️',
-      title: 'Easy Returns',
-      description: '30-day hassle-free returns on all items'
+      icon: '🌍',
+      title: 'Global Shipping',
+      description: 'Worldwide delivery to 195+ countries with real-time tracking'
     },
     {
-      icon: '💬',
-      title: '24/7 Support',
-      description: 'Round-the-clock customer service to help you'
+      icon: '💎',
+      title: 'Quality Guaranteed',
+      description: 'Premium products with authentic certificates and warranties'
+    },
+    {
+      icon: '🎁',
+      title: 'Exclusive Deals',
+      description: 'Member-only offers and seasonal promotions year-round'
+    },
+    {
+      icon: '🤝',
+      title: 'Expert Support',
+      description: '24/7 multilingual customer service and technical support'
     }
   ];
 
+  // --- Premium Testimonials --- //
   const testimonials = [
     {
       name: 'Sarah Johnson',
-      role: 'Verified Buyer',
+      role: 'Premium Member',
       rating: 5,
-      feedback: 'Outstanding quality and service! The products exceeded my expectations. Fast shipping and great customer support.',
+      feedback: 'Absolutely incredible! The products exceeded all my expectations. Premium quality at amazing prices. Highly recommend!',
       avatar: '👩‍💼'
     },
     {
       name: 'Michael Chen',
-      role: 'Premium Member',
+      role: 'Business Owner',
       rating: 5,
-      feedback: 'Been shopping here for 2 years. Consistently great products, competitive prices, and reliable delivery.',
+      feedback: 'Been a loyal customer for 3+ years. Consistent excellence in every aspect. Their customer service is unmatched!',
       avatar: '👨‍💻'
     },
     {
       name: 'Emma Wilson',
-      role: 'Fashion Enthusiast',
+      role: 'Fashion Designer',
       rating: 5,
-      feedback: 'Love the variety and style! Found exactly what I was looking for. The quality is amazing for the price.',
+      feedback: 'The variety, quality, and prices are unbeatable. Found my favorite products here. Love the seamless experience!',
       avatar: '👩‍🎨'
+    },
+    {
+      name: 'David Rodriguez',
+      role: 'Tech Enthusiast',
+      rating: 5,
+      feedback: 'Exceptional electronics selection with verified authenticity. Fast delivery and excellent warranty support!',
+      avatar: '�‍🔬'
     }
   ];
 
   // --- Helper Functions --- //
   const renderStars = (rating) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <span key={i} style={{ color: i < rating ? '#ffd700' : '#e4e5e9', fontSize: '1.2rem' }}>
+      <span key={i} style={{ color: i < rating ? '#fbbf24' : '#e5e7eb', fontSize: '1.3rem' }}>
         ★
       </span>
     ));
@@ -80,75 +115,111 @@ function Home() {
   // --- Render Method --- //
   return (
     <div className="fade-in">
-      {/* Hero Section */}
-      <div className="page-header">
+      {/* Mega Hero Section */}
+      <div className="page-header" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
         <Container>
-          <h1 className="page-title">
-            🛒 Welcome to FakeStore
+          <h1 className="page-title" style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>
+            ✨ Welcome to FakeStore
           </h1>
-          <p className="page-subtitle">
-            Discover premium quality products at unbeatable prices
+          <p className="page-subtitle" style={{ fontSize: '1.4rem', marginBottom: '2rem', opacity: 0.95 }}>
+            Premium Quality. Unbeatable Prices. Exceptional Service.
           </p>
-          <div className="mt-4">
+          <p style={{ color: 'rgba(255, 255, 255, 0.85)', fontSize: '1.1rem', marginBottom: '2rem' }}>
+            Discover thousands of products from top sellers worldwide
+          </p>
+          <div className="mt-4" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button
               as={Link}
               to="/products"
-              className="btn-professional me-3"
+              className="btn-primary"
               size="lg"
+              style={{ padding: '0.95rem 2.5rem', fontSize: '1.1rem' }}
             >
-              Shop Now
+              🛍️ Shop Now
             </Button>
             <Button
               as={Link}
               to="/add-product"
-              className="btn-success-professional"
+              className="btn-success"
               size="lg"
+              style={{ padding: '0.95rem 2.5rem', fontSize: '1.1rem' }}
             >
-              Add Product
+              ✨ Sell Products
             </Button>
           </div>
         </Container>
       </div>
 
-      {/* Stats Section */}
-      <Container className="mb-5">
+      {/* Enhanced Stats Section */}
+      <Container className="mb-5" style={{ marginTop: '-2rem', position: 'relative', zIndex: 10 }}>
         <Row className="g-4">
-          <Col md={4}>
-            <div className="stats-card">
-              <div className="stats-number">{stats.totalProducts}+</div>
-              <div className="stats-label">Products Available</div>
-            </div>
-          </Col>
-          <Col md={4}>
-            <div className="stats-card">
-              <div className="stats-number">{stats.categories}</div>
-              <div className="stats-label">Categories</div>
-            </div>
-          </Col>
-          <Col md={4}>
-            <div className="stats-card">
-              <div className="stats-number">{stats.happyCustomers}+</div>
-              <div className="stats-label">Happy Customers</div>
-            </div>
-          </Col>
+          {[
+            { label: 'Products Available', value: stats.totalProducts, icon: '📦', color: '#3b82f6' },
+            { label: 'Categories', value: stats.categories, icon: '📂', color: '#10b981' },
+            { label: 'Happy Customers', value: stats.happyCustomers + '+', icon: '😊', color: '#f59e0b' }
+          ].map((stat, idx) => (
+            <Col md={4} key={idx}>
+              <div className="stats-card" style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #f8fbff 100%)',
+                borderRadius: '16px',
+                padding: '2rem',
+                boxShadow: '0 10px 30px rgba(15, 23, 42, 0.1)',
+                textAlign: 'center',
+                transition: 'all 0.3s ease',
+                border: '2px solid rgba(59, 130, 246, 0.1)',
+              }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>{stat.icon}</div>
+                <div style={{
+                  fontSize: '2.5rem',
+                  fontWeight: '900',
+                  background: `linear-gradient(135deg, ${stat.color}, ${stat.color}dd)`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  marginBottom: '0.5rem'
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#64748b' }}>
+                  {stat.label}
+                </div>
+              </div>
+            </Col>
+          ))}
         </Row>
       </Container>
 
-      {/* Features Section */}
-      <Container className="mb-5">
-        <h2 className="text-center mb-5 fw-bold">Why Choose FakeStore?</h2>
+      {/* Enhanced Features Section */}
+      <Container className="mb-5" style={{ marginTop: '3rem' }}>
+        <h2 className="text-center mb-5" style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b' }}>
+          Why Choose FakeStore?
+        </h2>
         <Row className="g-4">
           {features.map((feature, index) => (
-            <Col md={6} lg={3} key={index}>
-              <Card className="professional-card h-100 text-center p-4">
-                <div style={{ fontSize: '3rem' }} className="mb-3">
-                  {feature.icon}
-                </div>
-                <Card.Body>
-                  <Card.Title className="h5 fw-bold mb-3">
+            <Col md={6} lg={4} key={index}>
+              <Card className="h-100" style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #f8fbff 100%)',
+                border: '2px solid rgba(59, 130, 246, 0.1)',
+                borderRadius: '16px',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                cursor: 'pointer',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-12px)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(59, 130, 246, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(15, 23, 42, 0.1)';
+              }}>
+                <Card.Body className="p-4 text-center">
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
+                    {feature.icon}
+                  </div>
+                  <Card.Title className="h5" style={{ fontWeight: '800', marginBottom: '0.75rem', color: '#1e293b' }}>
                     {feature.title}
                   </Card.Title>
-                  <Card.Text className="text-muted">
+                  <Card.Text style={{ color: '#64748b', lineHeight: '1.6' }}>
                     {feature.description}
                   </Card.Text>
                 </Card.Body>
@@ -158,95 +229,161 @@ function Home() {
         </Row>
       </Container>
 
-      {/* Featured Products Carousel */}
+      {/* Enhanced Featured Products Carousel */}
       {featuredProducts.length > 0 && (
-        <Container className="mb-5">
-          <h2 className="text-center mb-5 fw-bold">Featured Products</h2>
-          <Carousel fade interval={4000} className="professional-card">
-            {featuredProducts.map((product, index) => (
-              <Carousel.Item key={index}>
-                <div className="d-flex justify-content-center align-items-center" style={{ height: '400px', background: '#f8f9fa' }}>
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    style={{ maxHeight: '350px', maxWidth: '100%', objectFit: 'contain' }}
-                  />
-                </div>
-                <Carousel.Caption className="bg-dark bg-opacity-75 rounded p-4">
-                  <h3 className="h4">{product.title.substring(0, 50)}...</h3>
-                  <p className="mb-2">{product.description.substring(0, 100)}...</p>
-                  <Badge bg="success" className="fs-6 p-2">
-                    ${product.price}
-                  </Badge>
-                </Carousel.Caption>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </Container>
+        <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', padding: '3rem 0' }} className="mb-5">
+          <Container>
+            <h2 className="text-center mb-5" style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b' }}>
+              🌟 Featured Collection
+            </h2>
+            <Row className="g-4">
+              {featuredProducts.map((product, idx) => (
+                <Col md={6} lg={3} key={idx}>
+                  <Card style={{
+                    background: 'linear-gradient(135deg, #ffffff 0%, #f8fbff 100%)',
+                    border: '2px solid rgba(59, 130, 246, 0.1)',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    transition: 'all 0.4s ease',
+                    height: '100%'
+                  }}>
+                    <div style={{
+                      height: '200px',
+                      background: 'linear-gradient(135deg, #f1f5f9, #e0e7ff)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        style={{
+                          maxHeight: '180px',
+                          maxWidth: '100%',
+                          objectFit: 'contain',
+                          transition: 'transform 0.3s ease'
+                        }}
+                      />
+                    </div>
+                    <Card.Body className="p-3">
+                      <Card.Title className="h6" style={{ fontWeight: '700' }}>
+                        {product.title.substring(0, 40)}...
+                      </Card.Title>
+                      <Badge bg="info" className="mb-2">{product.category}</Badge>
+                      <div style={{
+                        fontSize: '1.5rem',
+                        fontWeight: '900',
+                        background: 'linear-gradient(135deg, #3b82f6, #0ea5e9)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>
+                        ${product.price.toFixed(2)}
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Container>
+        </div>
       )}
 
-      {/* Customer Testimonials */}
-      <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)' }} className="py-5">
+      {/* Enhanced Testimonials Section */}
+      <Container className="mb-5">
+        <h2 className="text-center mb-5" style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b' }}>
+          💬 Customer Love
+        </h2>
+        <Row className="g-4">
+          {testimonials.map((testimonial, index) => (
+            <Col md={6} lg={3} key={index}>
+              <Card style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #f8fbff 100%)',
+                border: '2px solid rgba(59, 130, 246, 0.1)',
+                borderRadius: '16px',
+                height: '100%',
+                transition: 'all 0.4s ease'
+              }}>
+                <Card.Body className="p-4 text-center d-flex flex-column">
+                  <div style={{ fontSize: '3.5rem', marginBottom: '0.75rem' }}>
+                    {testimonial.avatar}
+                  </div>
+                  <div className="mb-2">
+                    {renderStars(testimonial.rating)}
+                  </div>
+                  <Card.Text style={{
+                    fontStyle: 'italic',
+                    color: '#475569',
+                    marginBottom: '1rem',
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    "{testimonial.feedback}"
+                  </Card.Text>
+                  <div style={{ marginTop: 'auto' }}>
+                    <Card.Title className="h6 mb-1" style={{ fontWeight: '700', color: '#1e293b' }}>
+                      {testimonial.name}
+                    </Card.Title>
+                    <small style={{ color: '#64748b' }}>{testimonial.role}</small>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+
+      {/* Premium CTA Section */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #0ea5e9 100%)',
+        borderRadius: '20px',
+        padding: '3rem 2rem',
+        marginBottom: '3rem'
+      }}>
         <Container>
-          <h2 className="text-center mb-5 fw-bold">What Our Customers Say</h2>
-          <Row className="g-4">
-            {testimonials.map((testimonial, index) => (
-              <Col md={4} key={index}>
-                <Card className="professional-card h-100 text-center">
-                  <Card.Body className="p-4">
-                    <div className="mb-3" style={{ fontSize: '4rem' }}>
-                      {testimonial.avatar}
-                    </div>
-                    <div className="mb-3">
-                      {renderStars(testimonial.rating)}
-                    </div>
-                    <Card.Text className="fst-italic mb-4 text-muted">
-                      "{testimonial.feedback}"
-                    </Card.Text>
-                    <div>
-                      <Card.Title className="h6 mb-1">
-                        {testimonial.name}
-                      </Card.Title>
-                      <small className="text-muted">{testimonial.role}</small>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+          <Row className="justify-content-center">
+            <Col lg={8} className="text-center">
+              <h2 style={{
+                fontSize: '2.25rem',
+                fontWeight: '900',
+                color: '#ffffff',
+                marginBottom: '1rem'
+              }}>
+                🚀 Ready to Transform Your Shopping?
+              </h2>
+              <p style={{
+                fontSize: '1.1rem',
+                color: 'rgba(255, 255, 255, 0.9)',
+                marginBottom: '2rem',
+                lineHeight: '1.8'
+              }}>
+                Join over 5,000+ satisfied customers and discover a world of premium products at unbeatable prices. Experience shopping like never before.
+              </p>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Button
+                  as={Link}
+                  to="/products"
+                  className="btn-light"
+                  size="lg"
+                  style={{ padding: '0.85rem 2rem', fontWeight: '700' }}
+                >
+                  Browse Products
+                </Button>
+                <Button
+                  as={Link}
+                  to="/add-product"
+                  className="btn-outline-light"
+                  size="lg"
+                  style={{ padding: '0.85rem 2rem', fontWeight: '700' }}
+                >
+                  Become a Seller
+                </Button>
+              </div>
+            </Col>
           </Row>
         </Container>
       </div>
-
-      {/* Call to Action Section */}
-      <Container className="text-center py-5">
-        <Row className="justify-content-center">
-          <Col lg={8}>
-            <h2 className="fw-bold mb-4">Ready to Start Shopping?</h2>
-            <p className="lead text-muted mb-4">
-              Join thousands of satisfied customers who trust FakeStore for their shopping needs.
-              Browse our extensive collection of high-quality products.
-            </p>
-            <div>
-              <Button
-                as={Link}
-                to="/products"
-                className="btn-professional me-3"
-                size="lg"
-              >
-                Browse Products
-              </Button>
-              <Button
-                as={Link}
-                to="/add-product"
-                className="btn-success-professional"
-                size="lg"
-              >
-                Become a Seller
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
     </div>
   );
 }
